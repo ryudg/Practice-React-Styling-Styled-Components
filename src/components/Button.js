@@ -2,22 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { darken, lighten } from "polished";
 
-const StyledButton = styled.button`
-  // 공통스타일
-  outline: none;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  padding-left: 1rem;
-  padding-right: 1rem;
-
-  /* 크기 */
-  height: 2.25rem;
-  font-size: 1rem;
-
-  /* 색상 */
+const colorStyles = css`
   ${({ theme, color }) => {
     const selected = theme.palette[color];
     return css`
@@ -30,6 +15,46 @@ const StyledButton = styled.button`
       }
     `;
   }}
+`;
+
+const sizes = {
+  large: {
+    height: "3rem",
+    fontSize: "1.25rem",
+  },
+  medium: {
+    height: "2.25rem",
+    fontSize: "1rem",
+  },
+  small: {
+    height: "1.75rem",
+    fontSize: "0.875rem",
+  },
+};
+
+const sizeStyles = css`
+  ${({ size }) => css`
+    height: ${sizes[size].height};
+    font-size: ${sizes[size].fontSize};
+  `}
+`;
+
+const StyledButton = styled.button`
+  // 공통스타일
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  /* 크기 */
+  ${sizeStyles}
+
+  /* 색상 */
+  ${colorStyles}
 
   /* 기타 */
   & + & {
@@ -37,9 +62,9 @@ const StyledButton = styled.button`
   }
 `;
 
-function Button({ children, color, ...rest }) {
+function Button({ children, color, size, ...rest }) {
   return (
-    <StyledButton color={color} {...rest}>
+    <StyledButton color={color} size={size} {...rest}>
       {children}
     </StyledButton>
   );
@@ -47,6 +72,7 @@ function Button({ children, color, ...rest }) {
 
 Button.defaultProps = {
   color: "blue",
+  size: "medium",
 };
 
 export default Button;
