@@ -63,6 +63,18 @@ function App() {
             BUTTON
           </Button>
         </ButtonGroup>
+
+        <ButtonGroup>
+          <Button size="large" fullWidth>
+            BUTTON
+          </Button>
+          <Button size="large" color="gray" fullWidth>
+            BUTTON
+          </Button>
+          <Button size="large" color="pink" fullWidth>
+            BUTTON
+          </Button>
+        </ButtonGroup>
       </AppBlock>
     </ThemeProvider>
   );
