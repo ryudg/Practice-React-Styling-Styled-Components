@@ -895,3 +895,179 @@ Button.defaultProps = {
 
 export default Button;
 ```
+
+## 5.5 `outline` 테투리 설정
+
+- Button 컴포넌트에 `outline` 이라는 `props` 를 설정하여 이 값이 `true` 일 때에는 테두리만 지닌 버튼을 보여주도록 설정
+
+```javascript
+// components/Button.js
+
+import React from "react";
+import styled, { css } from "styled-components";
+import { darken, lighten } from "polished";
+
+const colorStyles = css`
+  ${({ theme, color }) => {
+    const selected = theme.palette[color];
+    return css`
+      background: ${selected};
+      &:hover {
+        background: ${lighten(0.1, selected)};
+      }
+      &:active {
+        background: ${darken(0.1, selected)};
+      }
+      ${(props) =>
+        props.outline &&
+        css`
+          color: ${selected};
+          background: none;
+          border: 1px solid ${selected};
+          &:hover {
+            background: ${selected};
+            color: white;
+          }
+        `}
+    `;
+  }}
+`;
+
+const sizes = {
+  large: {
+    height: "3rem",
+    fontSize: "1.25rem",
+  },
+  medium: {
+    height: "2.25rem",
+    fontSize: "1rem",
+  },
+  small: {
+    height: "1.75rem",
+    fontSize: "0.875rem",
+  },
+};
+
+const sizeStyles = css`
+  ${({ size }) => css`
+    height: ${sizes[size].height};
+    font-size: ${sizes[size].fontSize};
+  `}
+`;
+
+const StyledButton = styled.button`
+  /* 공통 스타일 */
+  display: inline-flex;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  /* 크기 */
+  ${sizeStyles}
+
+  /* 색상 */
+  ${colorStyles}
+
+  /* 기타 */
+  & + & {
+    margin-left: 1rem;
+  }
+`;
+
+function Button({ children, color, size, outline, ...rest }) {
+  return (
+    <StyledButton color={color} size={size} outline={outline} {...rest}>
+      {children}
+    </StyledButton>
+  );
+}
+
+Button.defaultProps = {
+  color: "blue",
+  size: "medium",
+};
+
+export default Button;
+```
+
+- `outline` 스타일을 가진 버튼 렌더링
+
+```javascript
+// App.js
+
+import React from "react";
+import styled, { ThemeProvider } from "styled-components";
+import Button from "./components/Button";
+
+const AppBlock = styled.div`
+  width: 512px;
+  margin: 0 auto;
+  margin-top: 4rem;
+  border: 1px solid black;
+  padding: 1rem;
+`;
+
+const ButtonGroup = styled.div`
+  & + & {
+    margin-top: 1rem;
+  }
+`;
+
+function App() {
+  return (
+    <ThemeProvider
+      theme={{
+        palette: {
+          blue: "#228be6",
+          gray: "#495057",
+          pink: "#f06595",
+        },
+      }}
+    >
+      <AppBlock>
+        <ButtonGroup>
+          <Button size="large">BUTTON</Button>
+          <Button>BUTTON</Button>
+          <Button size="small">BUTTON</Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button color="gray" size="large">
+            BUTTON
+          </Button>
+          <Button color="gray">BUTTON</Button>
+          <Button color="gray" size="small">
+            BUTTON
+          </Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button color="pink" size="large">
+            BUTTON
+          </Button>
+          <Button color="pink">BUTTON</Button>
+          <Button color="pink" size="small">
+            BUTTON
+          </Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button size="large" outline>
+            BUTTON
+          </Button>
+          <Button color="gray" outline>
+            BUTTON
+          </Button>
+          <Button color="pink" size="small" outline>
+            BUTTON
+          </Button>
+        </ButtonGroup>
+      </AppBlock>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+```
